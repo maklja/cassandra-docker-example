@@ -1,0 +1,64 @@
+version: '2'
+services:
+  cassandra:
+    container_name: cass_1
+    image: docker.io/bitnami/cassandra:4.0
+    ports:
+      - 7000:7000
+      - 9042:9042
+    volumes:
+      - cassandra_data:/bitnami
+    networks:
+      - db_network
+    environment:
+      - CASSANDRA_SEEDS=cassandra,cassandra2
+      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+      - CASSANDRA_PASSWORD_SEEDER=yes
+      - CASSANDRA_PASSWORD=cassandra
+      - CASSANDRA_DATACENTER=test_dc
+      - MAX_HEAP_SIZE=1G
+      - HEAP_NEWSIZE=200M
+  cassandra2:
+    container_name: cass_2
+    image: docker.io/bitnami/cassandra:4.0
+    ports:
+      - 7001:7000
+      - 9043:9042
+    volumes:
+      - cassandra2_data:/bitnami
+    networks:
+      - db_network
+    environment:
+      - CASSANDRA_SEEDS=cassandra,cassandra2
+      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+      - CASSANDRA_PASSWORD=cassandra
+      - CASSANDRA_DATACENTER=test_dc
+      - MAX_HEAP_SIZE=1G
+      - HEAP_NEWSIZE=200M
+  cassandra3:
+    container_name: cass_3
+    image: docker.io/bitnami/cassandra:4.0
+    ports:
+      - 7002:7000
+      - 9044:9042
+    volumes:
+      - cassandra3_data:/bitnami
+    networks:
+      - db_network
+    environment:
+      - CASSANDRA_SEEDS=cassandra,cassandra2
+      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+      - CASSANDRA_PASSWORD=cassandra
+      - CASSANDRA_DATACENTER=test_dc
+      - MAX_HEAP_SIZE=1G
+      - HEAP_NEWSIZE=200M
+networks:
+  db_network:
+    driver: bridge
+volumes:
+  cassandra_data:
+    driver: local
+  cassandra2_data:
+    driver: local
+  cassandra3_data:
+    driver: local
